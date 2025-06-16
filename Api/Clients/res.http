@@ -1,0 +1,8 @@
+@baseUrl = https://pemweb2.test/api/clients
+
+@cType = application/json
+
+### Get all products
+
+GET {{baseUrl}}/products
+Content-Type: {{cType}}

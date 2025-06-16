@@ -21,5 +21,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $user->assignRole('super_admin');
+
+        $this->call([
+            ClientSeeder::class,
+            ProductSeeder::class,
+            // Add other seeders here
+        ]);
     }
 }
