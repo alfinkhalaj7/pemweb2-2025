@@ -1,226 +1,166 @@
+Berikut versi **sebagai catatan langkah-langkah** proyek API Laravel-mu dalam file `catatan.md`. Format ini cocok untuk ditampilkan di GitHub(maaf cuman masih setengah):
 
-https://pemweb2.test/ (ini untuk membuka di chrome)
+---
 
-➜  pemweb2 git:(main) dcm Product
-➜  pemweb2 git:(main) ✗ dcm Client
+````markdown
+# 📘 Catatan Proyek API Laravel - PEMWEB2
 
-isi migration :
+> **URL Proyek:** https://pemweb2.test/  
+> **Disusun oleh:** Alfin
 
-prodicts:
+---
 
-<?php
+## ✅ LANGKAH-LANGKAH
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+### 1. Inisialisasi Proyek
 
-return new class extends Migration
+```bash
+➜ pemweb2 git:(main) dcm Product
+➜ pemweb2 git:(main) ✗ dcm Client
+````
+
+---
+
+### 2. Buat Migration
+
+#### 🔹 Products
+
+```php
+Schema::create('products', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->decimal('price', 10, 2);
+    $table->timestamps();
+});
+```
+
+#### 🔹 Clients
+
+```php
+Schema::create('clients', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->timestamps();
+});
+```
+
+---
+
+### 3. Buat Seeder
+
+#### 🔹 ProductSeeder
+
+```php
+Product::firstOrCreate([
+    'name' => 'Default Product',
+    'price' => 1.00,
+]);
+```
+
+#### 🔹 ClientSeeder
+
+```php
+Client::firstOrCreate([
+    'name' => 'Default Client',
+]);
+```
+
+---
+
+### 4. Buat Model
+
+#### 🔹 Product
+
+```php
+protected $fillable = ['name', 'price'];
+```
+
+#### 🔹 Client
+
+```php
+protected $fillable = ['name'];
+```
+
+---
+
+### 5. Buat Controller
+
+#### 🔹 ClientController.php
+
+```php
+public function index()
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->stringid('name');
-            $table->decimal('price', 10, 2);
-            $table->timestamps();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('products');
-    }
-};
-
-clients:
-
-<?php
-
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        Schema::create('clients', function (Blueprint $table) {
-            $table->id();
-            $table->stringid('name');
-            $table->timestamps();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('clients');
-    }
-};
-
-isi bagian seeders:
-
-clien:
-
-<?php
-
-namespace Database\Seeders;
-
-use App\Models\Client;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-
-class ClientSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-        Client::firstOrCreate([
-            'name' => 'Default Client',
-        ]);
-    }
+    $data = Client::all();
+    return response()->json([
+        'message' => 'List of Clients',
+        'data' => $data
+    ], 200);
 }
+```
 
+---
 
-product:
+### 6. Atur Routing (`routes/api.php`)
 
-<?php
+```php
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ClientController;
 
-namespace Database\Seeders;
-
-use App\Models\Product;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-
-class ProductSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-        Product::firstOrCreate([
-            'name' => 'Default Product',
-            'price' => 1.00,
-        ]);
-    }
-}
-
-app/models:
-
-client:
-
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
-
-class Client extends Model
-{
-    protected $fillable = [
-        'name',
-    ];
-}
-
-
-product:
-
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
-
-class Product extends Model
-{
-    protected $fillable = [
-        'name',
-        'price',
-    ];
-}
-
-
-sudah dan lanjut api,masuk ke app/http/controler/
-
-claientcontroller.php:
-
-<?php
-
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-
-class ClientController extends Controller
-{
-    public function index()
-    {
-        $data = Client::all();
-        return response()->json([
-            'massage' => 'List of Clients',
-            'data' => $data
-        ], 200);
-    }
-}
-
-masuk ke routes api.php:
-
-<?php
-
-use Illuminate\Support\Facades\Route;
-
-Route:: prefix('products')->group (function () {
-   Route::get('/',[ProductController::class, 'index'])->name('product')
+Route::prefix('products')->group(function () {
+    Route::get('/', [ProductController::class, 'index'])->name('product');
 });
 
-Route:: prefix('clients')->group (function () {
-    Route::get('/',[ClientController::class, 'index'])->name('client')
- });
+Route::prefix('clients')->group(function () {
+    Route::get('/', [ClientController::class, 'index'])->name('client');
+});
+```
 
-masuk ke chrome /api/clients
+---
 
-lanjut install extenstation: rest client
+### 7. Tes API
 
+#### 🔹 Via Browser
 
-bikin folder di luar src
-![alt text](image.png)
+```
+https://pemweb2.test/api/clients
+```
 
-client:
+#### 🔹 Via Postman
+
+* Method: GET
+* URL: [https://pemweb2.test/api/clients](https://pemweb2.test/api/clients)
+* Headers: `Content-Type: application/json`
+
+#### 🔹 Via REST Client (VSCode)
+
+**Langkah:**
+
+1. Install extension **REST Client** di VSCode
+2. Buat folder khusus (di luar `src`)
+3. Buat file `clients.http`
+
+```http
 @baseUrl = https://pemweb2.test/api/clients
-
 @cType = application/json
 
-### Get all products
-
-GET {{baseUrl}}/products
+### Get all clients
+GET {{baseUrl}}/
 Content-Type: {{cType}}
 
+### Get all products
+GET https://pemweb2.test/api/products
+Content-Type: {{cType}}
+```
 
-cara ke 2
-masuk ke postman
+---
 
+## 📌 STATUS PROYEK
 
-cara ke 3:
+* [x] Migration ✅
+* [x] Seeder ✅
+* [x] Model ✅
+* [x] Controller ✅
+* [x] Routing ✅
+* [x] Tes API (Chrome, Postman, REST Client) ✅
 
-
-## saya edit di bagian client deskripsinya:
-
-migration
-seeders
-models
-
-AKU ALFIN
+---
