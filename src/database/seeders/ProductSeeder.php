@@ -14,7 +14,7 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         Product::firstOrCreate([
-            'name' => 'Default Product',
+            'name' => 'Roti Basi',
             'price' => 1.00,
         ]);
     }

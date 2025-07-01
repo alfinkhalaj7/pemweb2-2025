@@ -14,7 +14,8 @@ class ClientSeeder extends Seeder
     public function run(): void
     {
         Client::firstOrCreate([
-            'name' => 'Default Client',
+            'name' => 'Roti Basi',
+            'description' => 'Rasanya Enak sekaliiii.',
         ]);
     }
 }

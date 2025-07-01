@@ -1,5 +1,4 @@
-@baseUrl = https://pemweb2.test/api
-
+@baseUrl = https://pemweb2.test/api/products
 @cType = application/json
 
 ### Get all products

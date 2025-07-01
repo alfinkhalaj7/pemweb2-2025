@@ -1,3 +1,6 @@
+
+https://pemweb2.test/ (ini untuk membuka di chrome)
+
 ➜  pemweb2 git:(main) dcm Product
 ➜  pemweb2 git:(main) ✗ dcm Client
 
@@ -212,3 +215,12 @@ masuk ke postman
 
 
 cara ke 3:
+
+
+## saya edit di bagian client deskripsinya:
+
+migration
+seeders
+models
+
+AKU ALFIN
